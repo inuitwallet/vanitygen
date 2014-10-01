@@ -1,3 +1,20 @@
+==Update for Nubits==
+
+The -X flag now optionally accepts two numbers with a '#' delimiter.
+The first number is treated as the address version, the second as the 
+private key version. This allows for creation of Nubit addresses with 
+valid private keys.
+
+example:
+$ ./vanitygen -X 25#191 BLove
+Difficulty: 4553521
+Pattern: BLove                                                                 
+Address: BLove4o9cN93sgskTYCAYRyLsWkaMkJHKd
+Privkey: 7Qe4wwh8MYfFP6MeDBeZeN1UDhpeQjPrqFpTdb1kNCrz8avN92U
+
+=======================================================================
+
+
 I'd like to present a standalone command line vanity address generator 
 called vanitygen.
 
