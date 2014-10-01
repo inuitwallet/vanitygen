@@ -385,8 +385,8 @@ main(int argc, char **argv)
 			only_one = 1;
 			break;
 		case 'N':
-			addrtype = 52;
-			privtype = 180;
+			addrtype = 25;
+			privtype = 191;
 			scriptaddrtype = -1;
 			break;
 		case 'T':
@@ -395,8 +395,14 @@ main(int argc, char **argv)
 			scriptaddrtype = 196;
 			break;
 		case 'X':
-			addrtype = atoi(optarg);
-			privtype = 128 + addrtype;
+			if (strstr(optarg, "#") != NULL) {
+				addrtype = atoi(strtok(optarg, "#"));
+				privtype = atoi(strtok(NULL, "#"));
+			}
+			else {
+				addrtype = atoi(optarg);
+				privtype = addrtype + 128;
+			}
 			scriptaddrtype = addrtype;
 			break;
 		case 'F':
