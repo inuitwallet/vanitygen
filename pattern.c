@@ -399,8 +399,7 @@ vg_output_timing_console(vg_context_t *vcp, double count,
 {
 	double prob, time, targ;
 	char *unit;
-	char linebuf[80];
-	int rem, p, i;
+	int i;
 
 	const double targs[] = { 0.5, 0.75, 0.8, 0.9, 0.95, 1.0 };
 
@@ -415,25 +414,15 @@ vg_output_timing_console(vg_context_t *vcp, double count,
 		}
 	}
 
-	rem = sizeof(linebuf);
-	p = snprintf(linebuf, rem, "[%.2f %s][total %lld]",
+	fprintf(stdout, "%.2f %s|total %lld|",
 		     targ, unit, total);
-	assert(p > 0);
-	rem -= p;
-	if (rem < 0)
-		rem = 0;
 
 	if (vcp->vc_chance >= 1.0) {
 		prob = 1.0f - exp(-count/vcp->vc_chance);
 
 		if (prob <= 0.999) {
-			p = snprintf(&linebuf[p], rem, "[Prob %.1f%%]",
+			fprintf(stdout, "Prob %.1f%%|",
 				     prob * 100);
-			assert(p > 0);
-			rem -= p;
-			if (rem < 0)
-				rem = 0;
-			p = sizeof(linebuf) - rem;
 		}
 
 		for (i = 0; i < sizeof(targs)/sizeof(targs[0]); i++) {
@@ -464,40 +453,16 @@ vg_output_timing_console(vg_context_t *vcp, double count,
 			}
 
 			if (time > 1000000) {
-				p = snprintf(&linebuf[p], rem,
-					     "[%d%% in %e%s]",
+				fprintf(stdout,
+					     "%d%% in %e%s\n",
 					     (int) (100 * targ), time, unit);
 			} else {
-				p = snprintf(&linebuf[p], rem,
-					     "[%d%% in %.1f%s]",
+				fprintf(stdout,
+					     "%d%% in %.1f%s\n",
 					     (int) (100 * targ), time, unit);
 			}
-			assert(p > 0);
-			rem -= p;
-			if (rem < 0)
-				rem = 0;
-			p = sizeof(linebuf) - rem;
 		}
 	}
-
-	if (vcp->vc_found) {
-		if (vcp->vc_remove_on_match)
-			p = snprintf(&linebuf[p], rem, "[Found %lld/%ld]",
-				     vcp->vc_found, vcp->vc_npatterns_start);
-		else
-			p = snprintf(&linebuf[p], rem, "[Found %lld]",
-				     vcp->vc_found);
-		assert(p > 0);
-		rem -= p;
-		if (rem < 0)
-			rem = 0;
-	}
-
-	if (rem) {
-		memset(&linebuf[sizeof(linebuf)-rem], 0x20, rem);
-		linebuf[sizeof(linebuf)-1] = '\0';
-	}
-	printf("\r%s", linebuf);
 	fflush(stdout);
 }
 
@@ -1263,7 +1228,7 @@ vg_prefix_context_next_difficulty(vg_prefix_context_t *vcpp,
 				"Next match difficulty: %s (%ld prefixes)\n",
 				dbuf, vcpp->base.vc_npatterns);
 		else
-			fprintf(stderr, "Difficulty: %s\n", dbuf);
+			fprintf(stdout, "Difficulty: %s\n", dbuf);
 	}
 	vcpp->base.vc_chance = atof(dbuf);
 	OPENSSL_free(dbuf);
