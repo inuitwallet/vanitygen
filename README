@@ -1,4 +1,4 @@
-==Update for Nubits==
+#Update for Nubits#
 
 The -X flag now optionally accepts two numbers with a '#' delimiter.
 The first number is treated as the address version, the second as the 
@@ -12,7 +12,7 @@ Pattern: BLove
 Address: BLove4o9cN93sgskTYCAYRyLsWkaMkJHKd
 Privkey: 7Qe4wwh8MYfFP6MeDBeZeN1UDhpeQjPrqFpTdb1kNCrz8avN92U
 
-=======================================================================
+
 
 
 I'd like to present a standalone command line vanity address generator 
@@ -67,4 +67,3 @@ Currently, it is difficult to import the private key into bitcoin.
 Sipa's showwallet branch has a new command called "importprivkey" that 
 accepts the base-58 encoded private key.  Vanitygen has been tested to 
 work with that version of bitcoin.
-
