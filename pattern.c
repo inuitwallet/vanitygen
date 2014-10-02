@@ -397,72 +397,35 @@ void
 vg_output_timing_console(vg_context_t *vcp, double count,
 			 unsigned long long rate, unsigned long long total)
 {
-	double prob, time, targ;
-	char *unit;
+	double prob, time, targ, a_rate;
 	int i;
 
 	const double targs[] = { 0.5, 0.75, 0.8, 0.9, 0.95, 1.0 };
 
 	targ = rate;
-	unit = "key/s";
+	a_rate = targ;
 	if (targ > 1000) {
-		unit = "Kkey/s";
 		targ /= 1000.0;
 		if (targ > 1000) {
-			unit = "Mkey/s";
 			targ /= 1000.0;
 		}
 	}
 
-	fprintf(stdout, "%.2f %s|total %lld|",
-		     targ, unit, total);
+	fprintf(stdout, "%.0f|", a_rate);
 
-	if (vcp->vc_chance >= 1.0) {
-		prob = 1.0f - exp(-count/vcp->vc_chance);
+	prob = 1.0f - exp(-count/vcp->vc_chance);
 
-		if (prob <= 0.999) {
-			fprintf(stdout, "Prob %.1f%%|",
-				     prob * 100);
-		}
-
-		for (i = 0; i < sizeof(targs)/sizeof(targs[0]); i++) {
-			targ = targs[i];
-			if ((targ < 1.0) && (prob <= targ))
-				break;
-		}
-
-		if (targ < 1.0) {
-			time = ((-vcp->vc_chance * log(1.0 - targ)) - count) /
-				rate;
-			unit = "s";
-			if (time > 60) {
-				time /= 60;
-				unit = "min";
-				if (time > 60) {
-					time /= 60;
-					unit = "h";
-					if (time > 24) {
-						time /= 24;
-						unit = "d";
-						if (time > 365) {
-							time /= 365;
-							unit = "y";
-						}
-					}
-				}
-			}
-
-			if (time > 1000000) {
-				fprintf(stdout,
-					     "%d%% in %e%s\n",
-					     (int) (100 * targ), time, unit);
-			} else {
-				fprintf(stdout,
-					     "%d%% in %.1f%s\n",
-					     (int) (100 * targ), time, unit);
-			}
-		}
+	for (i = 0; i < sizeof(targs)/sizeof(targs[0]); i++) {
+		targ = targs[i];
+		if ((targ < 1.0) && (prob <= targ))
+			break;
 	}
+
+	if (targ < 1.0) {
+		time = ((-vcp->vc_chance * log(1.0 - targ)) - count) / rate;
+		fprintf(stdout, "%d|%.0f\n", (int) (100 * targ), time);
+	}
+
 	fflush(stdout);
 }
 
