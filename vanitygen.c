@@ -520,7 +520,7 @@ usage(const char *name)
 "-T            Generate bitcoin testnet address\n"
 "-X <version>  Generate address with the given version\n"
 "              Alternatively, specifiy <addressversion#privatekeyversion> when they differ\n"
-"-F <format>   Generate address with the given format (pubkey, compressed or script)\n"
+"-F <format>   Generate address with the given format (pubkey, uncompressed or script)\n"
 "-P <pubkey>   Specify base public key for piecewise key generation\n"
 "-e            Encrypt private keys, prompt for password\n"
 "-E <password> Encrypt private keys with <password> (UNSAFE)\n"
@@ -619,8 +619,8 @@ main(int argc, char **argv)
 			if (!strcmp(optarg, "script"))
 				format = VCF_SCRIPT;
 			else
-                        if (!strcmp(optarg, "compressed"))
-                                compressed = 1;
+                        if (!strcmp(optarg, "uncompressed"))
+                                compressed = 0;
                         else
 			if (strcmp(optarg, "pubkey")) {
 				fprintf(stderr,
