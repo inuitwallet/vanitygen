@@ -1,5 +1,7 @@
 #Update for Nubits#
 
+(donations [NBT] : BMJ2PJ1TNMwnTYUopQVxBrAPmmJjJjhd96)
+
 The -X flag now optionally accepts two numbers with a '#' delimiter.
 The first number is treated as the address version, the second as the 
 private key version. This allows for creation of Nubit addresses with 

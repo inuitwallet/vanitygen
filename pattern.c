@@ -423,8 +423,10 @@ vg_output_timing_console(vg_context_t *vcp, double count,
 
 	if (targ < 1.0) {
 		time = ((-vcp->vc_chance * log(1.0 - targ)) - count) / rate;
-		fprintf(stdout, "%d|%.0f\n", (int) (100 * targ), time);
+		fprintf(stdout, "%d|%.0f", (int) (100 * targ), time);
 	}
+
+	fprintf(stdout, "\n");
 
 	fflush(stdout);
 }
